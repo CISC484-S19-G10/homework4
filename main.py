@@ -17,7 +17,9 @@ mean_init = 0
 var_init = 1
 
 theta = [(mean_init, var_init) for i in range(0,k_num)]
+
 alpha = [(1/k_num) for i in range(0,k_num)]
+
 w = [[0 for k in range(0,k_num)] for i in data]
 print(theta)
 
@@ -28,7 +30,7 @@ def expectation(w, data, theta):
         denom = [0 for z in range(0,k)]
 
         for k in range(0,k_num):
-            dist = scipy.stats.norm(theta[0], theta[1])
+            dist = scipy.stats.norm(theta[k][0], theta[k][1])
             pdf = dist.pdf(data[i])
 
             denom[k] = pdf*alpha[k]
