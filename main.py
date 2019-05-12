@@ -1,13 +1,30 @@
+#!/usr/bin/python3
+
 import math
 import scipy.stats
 import random
+import argparse
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+
+    #required args
+    parser.add_argument('input_path', metavar='I',\
+                        help='the path to the data file')
+    parser.add_argument('n_distrib', metavar='K', type=int,\
+                        help='the given data will be modeled as K Gaussian distributions')
+
+    return parser.parse_args()
+
+args = parse_args()
+    
 lines = []
-with open('./em_data.txt') as f:
+with open(args.input_path) as f:
     lines = f.read().splitlines()
 
 data = [float(d) for d in lines]
 
-k_num = 3
+k_num = args.n_distrib
 n = len(data)
 
 import matplotlib.pyplot as p
@@ -28,7 +45,7 @@ w = [[0 for k in range(0,k_num)] for i in data]
 
 #print(n)
 
-#theta[1] is var^2
+#theta[1] is var
 def gaussian(point, theta):
     expd = math.exp(- ( (point-theta[0])**2) / (2*theta[1]) )
     scale = 1/(math.sqrt(2*math.pi*(theta[1])))
@@ -132,7 +149,8 @@ for t in theta:
 
     x = np.linspace(mu - 6*sigma, mu+6*sigma, 100)
     p.plot(x, stats.norm.pdf(x, mu, sigma))
-
+    p.xlabel('value')
+    p.ylabel('predicted frequency')
 
 p.show()
 
