@@ -30,7 +30,7 @@ n = len(data)
 import matplotlib.pyplot as p
 zeros = [0 for i in data]
 
-g = p.scatter(data, zeros)
+#g = p.scatter(data, zeros)
 #p.show(g)
 
 
@@ -129,6 +129,23 @@ def maximization():
     #print(theta)
     #print("-----")
 
+def find_log_likelihood(data, weights, param_weights, params):
+    EPSILON = .00001
+    log_likelihood = 0
+
+    for i, datum in enumerate(data):
+
+        #assume varience is 1 for now
+        log_likelihood -= math.log(math.sqrt(1 * 2 * math.pi))
+        
+        total = 0
+        for k, (mean, varience) in enumerate(params):
+            #total += expected_weight(datum, mean, params) * (datum - mean) ** 2
+            total += weights[i][k] * (datum - mean) ** 2
+
+        log_likelihood -= total / (2 * 1)
+
+    return log_likelihood
 
 for i in range(0,50):
     #print(theta)
@@ -143,15 +160,18 @@ for i in range(0,50):
 import scipy.stats as stats
 import numpy as np
 
+likelihoods = []
 for t in theta:
     mu = t[0]
     sigma = math.sqrt(t[1])
 
     x = np.linspace(mu - 6*sigma, mu+6*sigma, 100)
-    p.plot(x, stats.norm.pdf(x, mu, sigma))
-    p.xlabel('value')
-    p.ylabel('predicted frequency')
+    #p.plot(x, stats.norm.pdf(x, mu, sigma))
+    #p.xlabel('value')
+    #p.ylabel('predicted frequency')
 
-p.show()
+#p.show()
 
+print(len(data))
 print(theta)
+print('e^{}'.format(find_log_likelihood(data, w, alpha, theta)))
